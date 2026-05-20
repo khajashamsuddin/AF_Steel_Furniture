@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — AF Steel Furniture</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ── Admin-only styles ── */
+    body { background: #f2f3f5; }
+
+    .admin-layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .admin-sidebar {
+      width: 220px;
+      flex-shrink: 0;
+      background: var(--fg);
+      color: var(--white);
+      display: flex;
+      flex-direction: column;
+      padding: 2rem 0;
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      z-index: 100;
+    }
+    .sidebar-logo {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.25em;
+      padding: 0 1.5rem 2rem;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      margin-bottom: 1.5rem;
+    }
+    .sidebar-nav { flex: 1; display: flex; flex-direction: column; gap: 0.125rem; padding: 0 0.75rem; }
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.65rem 0.875rem;
+      font-size: 0.8125rem;
+      color: rgba(255,255,255,0.55);
+      border-radius: 0;
+      transition: background 0.2s, color 0.2s;
+      cursor: pointer;
+      letter-spacing: 0.02em;
+    }
+    .sidebar-link:hover { background: rgba(255,255,255,0.06); color: var(--white); }
+    .sidebar-link.active { background: rgba(255,255,255,0.1); color: var(--white); }
+    .sidebar-link svg { flex-shrink: 0; opacity: 0.7; }
+    .sidebar-link.active svg { opacity: 1; }
+
+    .sidebar-footer {
+      padding: 1.5rem;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    .sidebar-footer a {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.4);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: color 0.2s;
+    }
+    .sidebar-footer a:hover { color: rgba(255,255,255,0.8); }
+
+    /* Main content */
+    .admin-main {
+      margin-left: 220px;
+      flex: 1;
+      padding: 2.5rem clamp(1.25rem, 3vw, 2.5rem);
+      max-width: 1100px;
+    }
+    .admin-header {
+      margin-bottom: 2.5rem;
+    }
+    .admin-title {
+      font-size: 1.625rem;
+      font-weight: 300;
+      letter-spacing: -0.02em;
+      color: var(--fg);
+    }
+    .admin-subtitle {
+      font-size: 0.8125rem;
+      color: var(--muted-fg);
+      margin-top: 0.25rem;
+    }
+
+    /* Panels */
+    .admin-panel { display: none; }
+    .admin-panel.active { display: block; }
+
+    /* Stat cards */
+    .stat-cards {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--border);
+      margin-bottom: 2.5rem;
+    }
+    @media (max-width: 900px) { .stat-cards { grid-template-columns: repeat(2,1fr); } }
+    @media (max-width: 500px) { .stat-cards { grid-template-columns: 1fr; } }
+
+    .stat-card {
+      background: var(--white);
+      padding: 1.5rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .stat-card:hover { background: #fafafa; }
+    .stat-card-label {
+      font-size: 0.6875rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted-fg);
+      margin-bottom: 0.75rem;
+    }
+    .stat-card-value {
+      font-size: 2rem;
+      font-weight: 300;
+      letter-spacing: -0.03em;
+      color: var(--fg);
+      line-height: 1;
+    }
+
+    /* Table */
+    .admin-table-wrap {
+      background: var(--white);
+      border: 1px solid var(--border);
+      overflow-x: auto;
+    }
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8125rem;
+    }
+    .admin-table th {
+      text-align: left;
+      padding: 0.875rem 1rem;
+      font-size: 0.6875rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted-fg);
+      font-weight: 500;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    .admin-table td {
+      padding: 0.875rem 1rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--fg);
+      vertical-align: middle;
+    }
+    .admin-table tr:last-child td { border-bottom: none; }
+    .admin-table tr:hover td { background: #fafafa; }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.2rem 0.6rem;
+      font-size: 0.625rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border-radius: 0;
+    }
+    .badge-green { background: #e6f9ee; color: #1a8a42; }
+    .badge-amber { background: #fff7e0; color: #a06b00; }
+    .badge-gray  { background: #f0f0f0; color: var(--muted-fg); }
+
+    .action-btn {
+      width: 2rem;
+      height: 2rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border);
+      background: transparent;
+      cursor: pointer;
+      color: var(--muted-fg);
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+      margin-left: 0.25rem;
+    }
+    .action-btn:hover { background: var(--muted); color: var(--fg); border-color: var(--fg); }
+    .action-btn.danger:hover { background: #fef2f2; color: #c0392b; border-color: #c0392b; }
+
+    /* Toolbar row */
+    .table-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1rem 0.75rem;
+      border-bottom: 1px solid var(--border);
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .table-toolbar-title {
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: var(--fg);
+    }
+
+    /* Form / Modal */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      z-index: 500;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal {
+      background: var(--white);
+      width: 100%;
+      max-width: 520px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 2rem;
+    }
+    .modal-title {
+      font-size: 1.125rem;
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.01em;
+    }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.375rem; }
+    .form-group.full { grid-column: 1 / -1; }
+    .form-label {
+      font-size: 0.6875rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted-fg);
+      font-weight: 500;
+    }
+    .form-input, .form-select, .form-textarea {
+      font-family: var(--font-sans);
+      font-size: 0.875rem;
+      padding: 0.6rem 0.75rem;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--fg);
+      outline: none;
+      transition: border-color 0.2s;
+      border-radius: 0;
+      width: 100%;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--fg); }
+    .form-textarea { resize: vertical; min-height: 80px; }
+    .form-actions {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: flex-end;
+      margin-top: 1.5rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border);
+    }
+
+    /* Category inline edit */
+    .cat-row-edit { display: none; }
+    .cat-row-edit.active { display: flex; gap: 0.5rem; align-items: center; }
+    .cat-row-view { display: flex; align-items: center; gap: 0.75rem; }
+
+    /* Reviews approve/reject icons */
+    .approve-btn { color: #1a8a42 !important; }
+    .approve-btn:hover { background: #e6f9ee !important; border-color: #1a8a42 !important; }
+
+    /* Toast */
+    #toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(1rem);
+      background: var(--fg);
+      color: var(--white);
+      padding: 0.7rem 1.5rem;
+      font-size: 0.8125rem;
+      letter-spacing: 0.03em;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s, transform 0.3s;
+      z-index: 999;
+      white-space: nowrap;
+    }
+    #toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @media (max-width: 768px) {
+      .admin-sidebar { width: 100%; height: auto; position: relative; flex-direction: row; flex-wrap: wrap; padding: 1rem; }
+      .sidebar-logo { padding: 0; border: none; margin: 0; }
+      .sidebar-nav { flex-direction: row; padding: 0; gap: 0.25rem; }
+      .sidebar-footer { display: none; }
+      .admin-main { margin-left: 0; }
+      .admin-layout { flex-direction: column; }
+      .form-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ── Login Screen ── */
+    .login-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: var(--black);
+      color: var(--white);
+      font-family: var(--font-sans);
+      padding: 1.5rem;
+    }
+    .login-card {
+      width: 100%;
+      max-width: 400px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 2.5rem 2rem;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    }
+    .login-logo {
+      font-size: 0.8125rem;
+      font-weight: 600;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 2rem;
+      color: var(--white);
+    }
+    .login-title {
+      font-size: 1.25rem;
+      font-weight: 300;
+      letter-spacing: -0.01em;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      color: rgba(255,255,255,0.85);
+    }
+    .login-input-group {
+      margin-bottom: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.375rem;
+    }
+    .login-input-label {
+      font-size: 0.625rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+      font-weight: 500;
+    }
+    .login-input {
+      font-family: var(--font-sans);
+      font-size: 0.875rem;
+      padding: 0.75rem 1rem;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255, 255, 255, 0.02);
+      color: var(--white);
+      outline: none;
+      transition: border-color 0.2s, background-color 0.2s;
+      border-radius: 0;
+      width: 100%;
+    }
+    .login-input:focus {
+      border-color: rgba(255,255,255,0.4);
+      background: rgba(255,255,255,0.05);
+    }
+    .login-btn {
+      width: 100%;
+      background: var(--white);
+      color: var(--black);
+      border: none;
+      padding: 0.875rem;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-top: 1rem;
+      transition: opacity 0.2s;
+    }
+    .login-btn:hover {
+      opacity: 0.9;
+    }
+    .login-error {
+      font-size: 0.75rem;
+      color: #ff6b6b;
+      margin-top: 0.75rem;
+      text-align: center;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN CONTAINER -->
+<div class="login-container" id="login-container" style="display: none;">
+  <div class="login-card">
+    <div class="login-logo">AF STEEL FURNITURE</div>
+    <h2 class="login-title">Admin Access</h2>
+    <form id="login-form" novalidate>
+      <div class="login-input-group">
+        <label class="login-input-label" for="l-username">Username</label>
+        <input class="login-input" id="l-username" type="text" required placeholder="Enter username..." />
+      </div>
+      <div class="login-input-group">
+        <label class="login-input-label" for="l-password">Password</label>
+        <input class="login-input" id="l-password" type="password" required placeholder="Enter password..." />
+      </div>
+      <button type="submit" class="login-btn">Login</button>
+      <div class="login-error" id="login-error">Invalid username or password.</div>
+    </form>
+  </div>
+</div>
+
+<div class="admin-layout" style="display: none;">
+
+  <!-- SIDEBAR -->
+  <aside class="admin-sidebar" role="navigation" aria-label="Admin navigation">
+    <div class="sidebar-logo">AF STEEL FURNITURE</div>
+    <nav class="sidebar-nav">
+      <button class="sidebar-link active" data-panel="dashboard" id="nav-dashboard">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Dashboard
+      </button>
+      <button class="sidebar-link" data-panel="products" id="nav-products">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+        Products
+      </button>
+      <button class="sidebar-link" data-panel="categories" id="nav-categories">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        Categories
+      </button>
+      <button class="sidebar-link" data-panel="reviews" id="nav-reviews">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        Reviews
+      </button>
+    </nav>
+    <div class="sidebar-footer" style="display: flex; flex-direction: column; gap: 0.75rem;">
+      <a href="index.html">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 5 5 12 12 19"/></svg>
+        View site
+      </a>
+      <a href="#" id="logout-btn" style="color: rgba(255, 99, 99, 0.75); transition: color 0.2s;">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Logout
+      </a>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="admin-main">
+
+    <!-- ── DASHBOARD ── -->
+    <div class="admin-panel active" id="panel-dashboard">
+      <div class="admin-header" style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <h1 class="admin-title">Dashboard</h1>
+          <p class="admin-subtitle">Overview of your store</p>
+        </div>
+        <button class="btn btn-sm btn-outline" id="reset-defaults-btn" style="padding: 0.4rem 0.8rem; font-size: 0.65rem; border-color: var(--border); color: var(--muted-fg);">Reset to Defaults</button>
+      </div>
+
+      <div class="stat-cards" id="stat-cards">
+        <div class="stat-card" data-goto="products">
+          <p class="stat-card-label">Total Products</p>
+          <p class="stat-card-value" id="stat-total">—</p>
+        </div>
+        <div class="stat-card" data-goto="products">
+          <p class="stat-card-label">Featured</p>
+          <p class="stat-card-value" id="stat-featured">—</p>
+        </div>
+        <div class="stat-card" data-goto="reviews">
+          <p class="stat-card-label">Total Reviews</p>
+          <p class="stat-card-value" id="stat-reviews">—</p>
+        </div>
+        <div class="stat-card" data-goto="reviews">
+          <p class="stat-card-label">Pending Reviews</p>
+          <p class="stat-card-value" id="stat-pending">—</p>
+        </div>
+      </div>
+
+      <div class="admin-table-wrap">
+        <div class="table-toolbar">
+          <span class="table-toolbar-title">Recent Products</span>
+          <button class="btn btn-sm" onclick="switchPanel('products')">Manage all</button>
+        </div>
+        <table class="admin-table" id="dashboard-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Category</th>
+              <th>Price</th>
+              <th>Featured</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="dashboard-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── PRODUCTS ── -->
+    <div class="admin-panel" id="panel-products">
+      <div class="admin-header">
+        <h1 class="admin-title">Products</h1>
+        <p class="admin-subtitle">Manage your product catalogue</p>
+      </div>
+      <div class="admin-table-wrap">
+        <div class="table-toolbar">
+          <span class="table-toolbar-title" id="products-count"></span>
+          <button class="btn btn-sm" id="new-product-btn">+ New Product</button>
+        </div>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Category</th>
+              <th>Price</th>
+              <th>Featured</th>
+              <th>Custom</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="products-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── CATEGORIES ── -->
+    <div class="admin-panel" id="panel-categories">
+      <div class="admin-header">
+        <h1 class="admin-title">Categories</h1>
+        <p class="admin-subtitle">Manage product categories</p>
+      </div>
+
+      <!-- Add category -->
+      <div class="admin-table-wrap" style="margin-bottom:1.5rem">
+        <div class="table-toolbar">
+          <span class="table-toolbar-title">Add Category</span>
+        </div>
+        <div style="padding:1rem;display:flex;gap:.75rem;align-items:center">
+          <input type="text" id="new-cat-input" class="form-input" style="max-width:280px" placeholder="Category name…" aria-label="New category name" />
+          <button class="btn btn-sm" id="add-cat-btn">Add</button>
+        </div>
+      </div>
+
+      <div class="admin-table-wrap">
+        <div class="table-toolbar">
+          <span class="table-toolbar-title" id="categories-count"></span>
+        </div>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Slug</th>
+              <th>Products</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="categories-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── REVIEWS ── -->
+    <div class="admin-panel" id="panel-reviews">
+      <div class="admin-header">
+        <h1 class="admin-title">Reviews</h1>
+        <p class="admin-subtitle">Approve or delete customer reviews</p>
+      </div>
+      <div class="admin-table-wrap">
+        <div class="table-toolbar">
+          <span class="table-toolbar-title" id="reviews-count"></span>
+        </div>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Customer</th>
+              <th>Location</th>
+              <th>Rating</th>
+              <th>Review</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="reviews-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+</div><!-- /.admin-layout -->
+
+<!-- PRODUCT FORM MODAL -->
+<div class="modal-backdrop" id="product-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal">
+    <h2 class="modal-title" id="modal-title">New Product</h2>
+    <form id="product-form" novalidate>
+      <div class="form-grid">
+        <div class="form-group full">
+          <label class="form-label" for="f-name">Name *</label>
+          <input class="form-input" id="f-name" type="text" required placeholder="e.g. Atlas Pro Wardrobe" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="f-category">Category</label>
+          <select class="form-select" id="f-category"></select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="f-price">Price (R)</label>
+          <input class="form-input" id="f-price" type="number" min="0" step="0.01" placeholder="Leave blank for label" />
+        </div>
+        <div class="form-group full">
+          <label class="form-label" for="f-price-label">Price Label</label>
+          <input class="form-input" id="f-price-label" type="text" placeholder="e.g. Contact for pricing" />
+        </div>
+        <div class="form-group full">
+          <label class="form-label" for="f-desc">Description *</label>
+          <textarea class="form-textarea" id="f-desc" rows="4" required placeholder="Full product description…"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="f-dimensions">Dimensions</label>
+          <input class="form-input" id="f-dimensions" type="text" placeholder="H:220cm × W:120cm × D:60cm" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="f-material">Material</label>
+          <input class="form-input" id="f-material" type="text" placeholder="Cold-rolled steel, 2mm" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="f-finish">Finish</label>
+          <input class="form-input" id="f-finish" type="text" placeholder="Matte black powder coat" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="f-weight">Weight</label>
+          <input class="form-input" id="f-weight" type="text" placeholder="95kg" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="f-featured">Featured on homepage</label>
+          <select class="form-select" id="f-featured">
+            <option value="false">No</option>
+            <option value="true">Yes</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="f-customizable">Customizable</label>
+          <select class="form-select" id="f-customizable">
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label class="form-label" for="f-images">Image URLs (one per line)</label>
+          <textarea class="form-textarea" id="f-images" rows="3" placeholder="https://example.com/image1.jpg&#10;https://example.com/image2.jpg"></textarea>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn btn-outline" id="modal-cancel">Cancel</button>
+        <button type="submit" class="btn" id="modal-submit">Create Product</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script src="script.js"></script>
+<script>
+/* ── Admin-only logic ── */
+(function () {
+  'use strict';
+
+  // Local copy of products/categories/reviews (no backend)
+  let products    = JSON.parse(localStorage.getItem('sc_products')    || 'null') || [...window.PRODUCTS];
+  let categories  = JSON.parse(localStorage.getItem('sc_categories')  || 'null') || [...new Set(products.map(p=>p.category))].map((n,i)=>({id:i+1,name:n,slug:n.toLowerCase().replace(/\s+/g,'-')}));
+  let reviews     = JSON.parse(localStorage.getItem('sc_reviews')     || 'null') || [
+    { id:1, customerName:'Sarah Botha',     location:'Cape Town',   rating:5, text:'Exceptional quality and incredibly fast delivery.',                    approved:true  },
+    { id:2, customerName:'Marco du Plessis',location:'Johannesburg', rating:5, text:'Custom dimensions nailed to the millimetre.',                         approved:true  },
+    { id:3, customerName:'Lana Ferreira',   location:'Stellenbosch', rating:5, text:"As an interior designer, AF Steel Furniture's finish quality is unmatched.",  approved:true  },
+    { id:4, customerName:'James Nkosi',     location:'Durban',       rating:5, text:'Six months in — still looks brand new.',                               approved:false },
+    { id:5, customerName:'Thandi Molefe',   location:'Pretoria',     rating:5, text:'WhatsApp ordering was seamless. Got a quote same day.',                approved:false },
+  ];
+
+  let editingProductId = null;
+
+  function save() {
+    localStorage.setItem('sc_products',   JSON.stringify(products));
+    localStorage.setItem('sc_categories', JSON.stringify(categories));
+    localStorage.setItem('sc_reviews',    JSON.stringify(reviews));
+  }
+
+  /* Toast */
+  function toast(msg) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 2800);
+  }
+
+  /* Panel switching */
+  window.switchPanel = function(name) {
+    document.querySelectorAll('.admin-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+    document.getElementById('panel-' + name).classList.add('active');
+    document.getElementById('nav-' + name).classList.add('active');
+    renderPanel(name);
+  };
+
+  document.querySelectorAll('.sidebar-link').forEach(btn => {
+    btn.addEventListener('click', () => switchPanel(btn.dataset.panel));
+  });
+
+  document.querySelectorAll('.stat-card[data-goto]').forEach(card => {
+    card.addEventListener('click', () => switchPanel(card.dataset.goto));
+  });
+
+  /* ── Render helpers ── */
+  function fmt(n) { return 'R ' + Number(n).toLocaleString('en-ZA'); }
+  function stars(n) { return '★'.repeat(n) + '☆'.repeat(5-n); }
+  function slug(s) { return s.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,''); }
+
+  /* ── Dashboard ── */
+  function renderDashboard() {
+    document.getElementById('stat-total').textContent   = products.length;
+    document.getElementById('stat-featured').textContent = products.filter(p=>p.featured).length;
+    document.getElementById('stat-reviews').textContent  = reviews.length;
+    document.getElementById('stat-pending').textContent  = reviews.filter(r=>!r.approved).length;
+
+    const tbody = document.getElementById('dashboard-tbody');
+    tbody.innerHTML = '';
+    products.slice(0,6).forEach(p => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${p.name}</td>
+        <td>${p.category || '—'}</td>
+        <td>${p.price != null ? fmt(p.price) : (p.priceLabel || 'On request')}</td>
+        <td>${p.featured ? '<span class="badge badge-green">Yes</span>' : '<span class="badge badge-gray">No</span>'}</td>
+        <td>
+          <button class="action-btn" title="Edit" onclick="openEditProduct(${p.id})">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          </button>
+        </td>`;
+      tbody.appendChild(tr);
+    });
+  }
+
+  /* ── Products ── */
+  function renderProducts() {
+    document.getElementById('products-count').textContent = products.length + ' product' + (products.length !== 1 ? 's' : '');
+    const tbody = document.getElementById('products-tbody');
+    tbody.innerHTML = '';
+    products.forEach(p => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><strong>${p.name}</strong></td>
+        <td>${p.category || '—'}</td>
+        <td>${p.price != null ? fmt(p.price) : (p.priceLabel || 'On request')}</td>
+        <td>${p.featured ? '<span class="badge badge-green">Yes</span>' : '<span class="badge badge-gray">No</span>'}</td>
+        <td>${p.customizable ? '<span class="badge badge-green">Yes</span>' : '<span class="badge badge-gray">No</span>'}</td>
+        <td>
+          <button class="action-btn" title="Edit" onclick="openEditProduct(${p.id})">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          </button>
+          <button class="action-btn danger" title="Delete" onclick="deleteProduct(${p.id})">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+          </button>
+        </td>`;
+      tbody.appendChild(tr);
+    });
+  }
+
+  /* ── Categories ── */
+  function renderCategories() {
+    document.getElementById('categories-count').textContent = categories.length + ' categor' + (categories.length !== 1 ? 'ies' : 'y');
+    const tbody = document.getElementById('categories-tbody');
+    tbody.innerHTML = '';
+    categories.forEach(cat => {
+      const count = products.filter(p => p.category === cat.name).length;
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>
+          <div class="cat-row-view" id="cat-view-${cat.id}">
+            <span>${cat.name}</span>
+          </div>
+          <div class="cat-row-edit" id="cat-edit-${cat.id}">
+            <input class="form-input" style="max-width:180px" id="cat-input-${cat.id}" value="${cat.name}" aria-label="Edit category name" />
+            <button class="action-btn approve-btn" title="Save" onclick="saveCategory(${cat.id})">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </button>
+            <button class="action-btn" title="Cancel" onclick="cancelEditCategory(${cat.id})">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
+        </td>
+        <td style="color:var(--muted-fg);font-size:0.75rem">${cat.slug}</td>
+        <td>${count}</td>
+        <td>
+          <button class="action-btn" title="Edit" onclick="startEditCategory(${cat.id})">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          </button>
+          <button class="action-btn danger" title="Delete" onclick="deleteCategory(${cat.id})">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+          </button>
+        </td>`;
+      tbody.appendChild(tr);
+    });
+  }
+
+  /* ── Reviews ── */
+  function renderReviews() {
+    document.getElementById('reviews-count').textContent = reviews.length + ' review' + (reviews.length !== 1 ? 's' : '');
+    const tbody = document.getElementById('reviews-tbody');
+    tbody.innerHTML = '';
+    reviews.forEach(r => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><strong>${r.customerName}</strong></td>
+        <td>${r.location || '—'}</td>
+        <td style="color:var(--fg)">${stars(r.rating)}</td>
+        <td style="max-width:260px;white-space:normal;font-size:0.8rem;color:var(--muted-fg)">"${r.text}"</td>
+        <td>${r.approved
+          ? '<span class="badge badge-green">Approved</span>'
+          : '<span class="badge badge-amber">Pending</span>'}</td>
+        <td>
+          ${!r.approved ? `<button class="action-btn approve-btn" title="Approve" onclick="approveReview(${r.id})">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </button>` : ''}
+          <button class="action-btn danger" title="Delete" onclick="deleteReview(${r.id})">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+          </button>
+        </td>`;
+      tbody.appendChild(tr);
+    });
+  }
+
+  /* ── Panel router ── */
+  function renderPanel(name) {
+    if (name === 'dashboard')  renderDashboard();
+    if (name === 'products')   renderProducts();
+    if (name === 'categories') renderCategories();
+    if (name === 'reviews')    renderReviews();
+  }
+
+  /* ── Product CRUD ── */
+  function populateCategorySelect() {
+    const sel = document.getElementById('f-category');
+    sel.innerHTML = `<option value="">— None —</option>`;
+    categories.forEach(c => {
+      const opt = document.createElement('option');
+      opt.value = c.name;
+      opt.textContent = c.name;
+      sel.appendChild(opt);
+    });
+  }
+
+  function openModal(title, submitLabel) {
+    document.getElementById('modal-title').textContent  = title;
+    document.getElementById('modal-submit').textContent = submitLabel;
+    document.getElementById('product-modal').classList.add('open');
+    populateCategorySelect();
+  }
+
+  function closeModal() {
+    document.getElementById('product-modal').classList.remove('open');
+    document.getElementById('product-form').reset();
+    editingProductId = null;
+  }
+
+  document.getElementById('modal-cancel').addEventListener('click', closeModal);
+  document.getElementById('product-modal').addEventListener('click', e => {
+    if (e.target === document.getElementById('product-modal')) closeModal();
+  });
+
+  document.getElementById('new-product-btn').addEventListener('click', () => {
+    editingProductId = null;
+    openModal('New Product', 'Create Product');
+  });
+
+  window.openEditProduct = function(id) {
+    const p = products.find(x => x.id === id);
+    if (!p) return;
+    editingProductId = id;
+    openModal('Edit Product', 'Save Changes');
+    document.getElementById('f-name').value         = p.name || '';
+    document.getElementById('f-desc').value         = p.description || '';
+    document.getElementById('f-price').value        = p.price != null ? p.price : '';
+    document.getElementById('f-price-label').value  = p.priceLabel || '';
+    document.getElementById('f-dimensions').value   = p.dimensions || '';
+    document.getElementById('f-material').value     = p.material || '';
+    document.getElementById('f-finish').value       = p.finish || '';
+    document.getElementById('f-weight').value       = p.weight || '';
+    document.getElementById('f-featured').value     = String(p.featured);
+    document.getElementById('f-customizable').value = String(p.customizable);
+    document.getElementById('f-images').value       = (p.images || []).join('\n');
+    setTimeout(() => {
+      document.getElementById('f-category').value = p.category || '';
+    }, 0);
+  };
+
+  document.getElementById('product-form').addEventListener('submit', e => {
+    e.preventDefault();
+    const name = document.getElementById('f-name').value.trim();
+    const desc = document.getElementById('f-desc').value.trim();
+    if (!name || !desc) { toast('Name and description are required.'); return; }
+
+    const rawPrice = document.getElementById('f-price').value;
+    const data = {
+      name,
+      description: desc,
+      category:     document.getElementById('f-category').value || '',
+      price:        rawPrice !== '' ? parseFloat(rawPrice) : null,
+      priceLabel:   document.getElementById('f-price-label').value.trim() || null,
+      dimensions:   document.getElementById('f-dimensions').value.trim() || null,
+      material:     document.getElementById('f-material').value.trim() || null,
+      finish:       document.getElementById('f-finish').value.trim() || null,
+      weight:       document.getElementById('f-weight').value.trim() || null,
+      featured:     document.getElementById('f-featured').value === 'true',
+      customizable: document.getElementById('f-customizable').value === 'true',
+      images:       document.getElementById('f-images').value.split('\n').map(s=>s.trim()).filter(Boolean),
+      slug:         slug(name),
+    };
+
+    if (editingProductId != null) {
+      const idx = products.findIndex(p => p.id === editingProductId);
+      if (idx !== -1) products[idx] = { ...products[idx], ...data };
+      toast('Product updated.');
+    } else {
+      const maxId = products.reduce((m,p) => Math.max(m,p.id), 0);
+      products.push({ id: maxId + 1, ...data });
+      toast('Product created.');
+    }
+
+    save();
+    closeModal();
+    renderProducts();
+    renderDashboard();
+  });
+
+  window.deleteProduct = function(id) {
+    if (!confirm('Delete this product? This cannot be undone.')) return;
+    products = products.filter(p => p.id !== id);
+    save();
+    renderProducts();
+    renderDashboard();
+    toast('Product deleted.');
+  };
+
+  /* ── Category CRUD ── */
+  document.getElementById('add-cat-btn').addEventListener('click', addCategory);
+  document.getElementById('new-cat-input').addEventListener('keydown', e => { if (e.key === 'Enter') addCategory(); });
+
+  function addCategory() {
+    const input = document.getElementById('new-cat-input');
+    const name  = input.value.trim();
+    if (!name) return;
+    if (categories.find(c => c.name.toLowerCase() === name.toLowerCase())) { toast('Category already exists.'); return; }
+    const maxId = categories.reduce((m,c) => Math.max(m,c.id), 0);
+    categories.push({ id: maxId + 1, name, slug: slug(name) });
+    input.value = '';
+    save();
+    renderCategories();
+    toast('Category added.');
+  }
+
+  window.startEditCategory = function(id) {
+    document.getElementById('cat-view-' + id).style.display = 'none';
+    document.getElementById('cat-edit-' + id).classList.add('active');
+    document.getElementById('cat-input-' + id).focus();
+  };
+
+  window.cancelEditCategory = function(id) {
+    document.getElementById('cat-view-' + id).style.display = '';
+    document.getElementById('cat-edit-' + id).classList.remove('active');
+  };
+
+  window.saveCategory = function(id) {
+    const newName = document.getElementById('cat-input-' + id).value.trim();
+    if (!newName) return;
+    const cat = categories.find(c => c.id === id);
+    const old = cat.name;
+    cat.name = newName;
+    cat.slug = slug(newName);
+    // Update products too
+    products.forEach(p => { if (p.category === old) p.category = newName; });
+    save();
+    renderCategories();
+    toast('Category updated.');
+  };
+
+  window.deleteCategory = function(id) {
+    if (!confirm('Delete this category? Products will become uncategorised.')) return;
+    const cat = categories.find(c => c.id === id);
+    categories = categories.filter(c => c.id !== id);
+    products.forEach(p => { if (p.category === cat.name) p.category = ''; });
+    save();
+    renderCategories();
+    toast('Category deleted.');
+  };
+
+  /* ── Reviews CRUD ── */
+  window.approveReview = function(id) {
+    const r = reviews.find(x => x.id === id);
+    if (r) r.approved = true;
+    save();
+    renderReviews();
+    renderDashboard();
+    toast('Review approved.');
+  };
+
+  window.deleteReview = function(id) {
+    if (!confirm('Delete this review? This cannot be undone.')) return;
+    reviews = reviews.filter(r => r.id !== id);
+    save();
+    renderReviews();
+    renderDashboard();
+    toast('Review deleted.');
+  };
+
+  /* ── Auth Logic ── */
+  function checkAuth() {
+    const isLoggedIn = sessionStorage.getItem('af_admin_auth') === 'true';
+    if (isLoggedIn) {
+      document.getElementById('login-container').style.display = 'none';
+      document.querySelector('.admin-layout').style.display = 'flex';
+      renderDashboard();
+    } else {
+      document.getElementById('login-container').style.display = 'flex';
+      document.querySelector('.admin-layout').style.display = 'none';
+    }
+  }
+
+  document.getElementById('login-form')?.addEventListener('submit', e => {
+    e.preventDefault();
+    const u = document.getElementById('l-username').value.trim();
+    const p = document.getElementById('l-password').value;
+    const err = document.getElementById('login-error');
+
+    if (u === 'admin' && p === 'admin123') {
+      sessionStorage.setItem('af_admin_auth', 'true');
+      err.style.display = 'none';
+      checkAuth();
+      toast('Welcome back, Admin.');
+    } else {
+      err.style.display = 'block';
+    }
+  });
+
+  document.getElementById('logout-btn')?.addEventListener('click', e => {
+    e.preventDefault();
+    sessionStorage.removeItem('af_admin_auth');
+    checkAuth();
+    // Clear credentials
+    document.getElementById('l-username').value = '';
+    document.getElementById('l-password').value = '';
+    toast('Logged out successfully.');
+  });
+
+  /* ── Init ── */
+  document.getElementById('reset-defaults-btn')?.addEventListener('click', () => {
+    if (!confirm('Reset all products, categories, and reviews to original AF Steel Furniture defaults? This will overwrite your current changes.')) return;
+    localStorage.removeItem('sc_products');
+    localStorage.removeItem('sc_categories');
+    localStorage.removeItem('sc_reviews');
+    window.location.reload();
+  });
+
+  checkAuth();
+})();
+</script>
+</body>
+</html>

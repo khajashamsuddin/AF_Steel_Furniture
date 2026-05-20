@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AF Steel Furniture — Premium Steel Furniture & Accessories | Ali Cafe, Hyderabad</title>
+  <meta name="description" content="AF Steel Furniture fabricates bespoke, heavy-gauge steel furniture and accessories for architects, designers, and homeowners. Made to order in Cape Town. Order via WhatsApp." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ═══════════════════ NAVBAR ═══════════════════ -->
+  <nav id="navbar" role="navigation" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo" id="nav-logo-link">AF STEEL FURNITURE</a>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="#process">Process</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <a href="https://wa.me/919347945824" target="_blank" rel="noopener noreferrer" class="btn btn-sm" id="nav-cta">Get a Quote</a>
+      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <!-- Mobile drawer -->
+    <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+      <a href="#about" class="mobile-link">About</a>
+      <a href="products.html" class="mobile-link">Products</a>
+      <a href="#process" class="mobile-link">Process</a>
+      <a href="#contact" class="mobile-link">Contact</a>
+      <a href="https://wa.me/919347945824" target="_blank" rel="noopener noreferrer" class="btn mobile-link-btn">Get a Quote</a>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════ HERO ═══════════════════ -->
+  <section id="hero" aria-label="Hero" data-testid="hero-section">
+    <div class="hero-bg">
+      <img
+        src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1800&q=85&fit=crop"
+        alt="Premium steel furniture by AF Steel Furniture"
+        class="hero-img"
+        id="hero-img"
+      />
+      <div class="hero-overlay"></div>
+    </div>
+    <div class="hero-content" id="hero-content">
+      <p class="eyebrow hero-eyebrow">Precision Fabricated</p>
+      <h1 class="hero-heading">
+        Steel,<br />
+        <em>built to last.</em>
+      </h1>
+      <div class="hero-actions">
+        <a href="products.html" class="btn btn-white" id="hero-cta-primary">
+          Explore Products
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+        <a href="https://wa.me/919347945824" target="_blank" rel="noopener noreferrer" class="btn btn-ghost" id="hero-cta-whatsapp">
+          Get a Quote
+        </a>
+      </div>
+    </div>
+    <button class="scroll-hint" id="scroll-hint" aria-label="Scroll down" onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'})">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+  </section>
+
+  <!-- ═══════════════════ ABOUT ═══════════════════ -->
+  <section id="about" class="section section-light" data-testid="about-section">
+    <div class="container">
+      <div class="about-grid">
+        <div class="fade-in">
+          <p class="eyebrow">About the Atelier</p>
+          <h2 class="section-heading">
+            Furniture built with the precision of an engineer, the eye of a designer.
+          </h2>
+          <div class="body-text">
+            <p>
+              Since 2009, AF Steel Furniture has fabricated bespoke metal furniture and steel accessories for architects,
+              interior designers, and homeowners who refuse to compromise. Every piece is made
+              in our Cape Town workshop by skilled craftsmen who understand that quality is
+              in the details.
+            </p>
+            <p>
+              We design and manufacture every possible steel furniture piece and accessory — no shortcuts, no
+              flatpack, no compromise. The result is furniture and details that don't just look
+              exceptional but outlasts the buildings it lives in.
+            </p>
+          </div>
+          <div class="stats">
+            <div class="stat">
+              <div class="stat-value">15+</div>
+              <div class="stat-label">Years</div>
+            </div>
+            <div class="stat">
+              <div class="stat-value">2,000+</div>
+              <div class="stat-label">Projects</div>
+            </div>
+            <div class="stat">
+              <div class="stat-value">100%</div>
+              <div class="stat-label">Custom</div>
+            </div>
+          </div>
+        </div>
+        <div class="fade-in fade-in-delay about-img-wrap">
+          <img
+            src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=1200&q=85&fit=crop"
+            alt="AF Steel Furniture workshop Cape Town"
+            class="about-img"
+          />
+          <div class="about-img-border"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ PRODUCTS ═══════════════════ -->
+  <section id="products" class="section section-muted" data-testid="products-section">
+    <div class="container">
+      <div class="section-header fade-in">
+        <div>
+          <p class="eyebrow">Our Work</p>
+          <h2 class="section-heading-sm">Selected pieces</h2>
+        </div>
+        <a href="products.html" class="view-all">View all <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      </div>
+
+      <div class="product-grid">
+        <!-- Product cards are rendered by JS -->
+      </div>
+
+      <div class="text-center mt-lg mobile-only fade-in">
+        <a href="products.html" class="btn btn-outline">View All Products <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ PROCESS ═══════════════════ -->
+  <section id="process" class="section section-dark" data-testid="process-section">
+    <div class="container">
+      <div class="fade-in">
+        <p class="eyebrow eyebrow-light">How We Work</p>
+        <h2 class="section-heading-sm section-heading-light">The process</h2>
+      </div>
+      <div class="process-grid">
+        <div class="process-step fade-in" style="--delay:0s">
+          <div class="step-num">01</div>
+          <h3 class="step-title">Consultation</h3>
+          <p class="step-desc">We work closely with you to understand your space, requirements, and aesthetic vision. Every project begins with a conversation.</p>
+        </div>
+        <div class="process-step fade-in" style="--delay:0.1s">
+          <div class="step-num">02</div>
+          <h3 class="step-title">Design &amp; Engineering</h3>
+          <p class="step-desc">Our engineers produce precise technical drawings. Every millimetre is accounted for before a single sheet of steel is cut.</p>
+        </div>
+        <div class="process-step fade-in" style="--delay:0.2s">
+          <div class="step-num">03</div>
+          <h3 class="step-title">Fabrication</h3>
+          <p class="step-desc">Skilled craftsmen cut, weld, and finish each piece by hand in our Cape Town workshop using heavy-gauge cold-rolled steel.</p>
+        </div>
+        <div class="process-step fade-in" style="--delay:0.3s">
+          <div class="step-num">04</div>
+          <h3 class="step-title">Finishing &amp; Delivery</h3>
+          <p class="step-desc">Powder-coated to your specification and delivered white-glove to your door. We don't leave until it's installed to your satisfaction.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ REVIEWS ═══════════════════ -->
+  <section id="reviews" class="section section-light" data-testid="reviews-section">
+    <div class="container">
+      <div class="fade-in">
+        <p class="eyebrow">Testimonials</p>
+        <h2 class="section-heading-sm">What our clients say</h2>
+      </div>
+      <div class="reviews-grid">
+        <div class="review-card fade-in" style="--delay:0s">
+          <div class="stars" aria-label="5 stars">★★★★★</div>
+          <p class="review-text">"Exceptional quality and incredibly fast delivery. The steel wardrobe is a centrepiece of our new home — every guest asks about it."</p>
+          <div class="reviewer">
+            <p class="reviewer-name">Altaf</p>
+            <p class="reviewer-location">Ali Cafe</p>
+          </div>
+        </div>
+        <div class="review-card fade-in" style="--delay:0.08s">
+          <div class="stars" aria-label="5 stars">★★★★★</div>
+          <p class="review-text">"We specified custom dimensions for a tight alcove and AF Steel Furniture nailed it to the millimetre. Truly bespoke craftsmanship."</p>
+          <div class="reviewer">
+            <p class="reviewer-name">Rahman</p>
+            <p class="reviewer-location">Amberpet</p>
+          </div>
+        </div>
+        <div class="review-card fade-in" style="--delay:0.16s">
+          <div class="stars" aria-label="5 stars">★★★★★</div>
+          <p class="review-text">"As an interior designer I've worked with many fabricators. AF Steel Furniture's attention to detail and finish quality is unmatched in South Africa."</p>
+          <div class="reviewer">
+            <p class="reviewer-name">Mubeen</p>
+            <p class="reviewer-location">Ramantapur</p>
+          </div>
+        </div>
+        <div class="review-card fade-in" style="--delay:0.24s">
+          <div class="stars" aria-label="5 stars">★★★★★</div>
+          <p class="review-text">"Ordered a set of office storage cabinets. Six months in and they look brand new — the powder coat is flawless and the drawers still glide perfectly."</p>
+          <div class="reviewer">
+            <p class="reviewer-name">Ahmed</p>
+            <p class="reviewer-location">Malakpet</p>
+          </div>
+        </div>
+        <div class="review-card fade-in" style="--delay:0.32s">
+          <div class="stars" aria-label="4 stars">★★★★★</div>
+          <p class="review-text">"The WhatsApp ordering process was seamless. Got a detailed quote same day and the product arrived in perfect condition."</p>
+          <div class="reviewer">
+            <p class="reviewer-name">Anonymous</p>
+            <p class="reviewer-location">Old City</p>
+          </div>
+        </div>
+        <div class="review-card fade-in" style="--delay:0.40s">
+          <div class="stars" aria-label="5 stars">★★★★★</div>
+          <p class="review-text">"Bought two steel lockers for our gym. Incredible build quality — solid as a rock and the brushed graphite finish looks premium even after heavy use."</p>
+          <div class="reviewer">
+            <p class="reviewer-name">Anonymous</p>
+            <p class="reviewer-location">Attapur</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ FAQ ═══════════════════ -->
+  <section id="faq" class="section section-faq" data-testid="faq-section">
+    <div class="container">
+      <div class="faq-wrap">
+        <div class="fade-in">
+          <p class="eyebrow">FAQ</p>
+          <h2 class="section-heading-sm">Common questions</h2>
+        </div>
+        <div class="faq-list fade-in" id="faq-list">
+          <!-- injected by JS -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ CONTACT ═══════════════════ -->
+  <section id="contact" class="section section-dark" data-testid="contact-section">
+    <div class="container">
+      <div class="contact-grid">
+        <div class="fade-in">
+          <p class="eyebrow eyebrow-light">Get In Touch</p>
+          <h2 class="contact-heading">Ready to discuss your project?</h2>
+        </div>
+        <div class="fade-in fade-in-delay">
+          <p class="contact-body">
+            Whether you have a firm brief or just an idea, we'd love to hear from you.
+            Send us a message on WhatsApp and we'll respond within 24 hours.
+          </p>
+          <div class="contact-details">
+            <p>Ali Cafe, Hyderabad</p>
+            <p>info@afsteelfurniture.co.za</p>
+            <p>+91 93479 45824</p>
+          </div>
+          <a href="https://wa.me/919347945824" target="_blank" rel="noopener noreferrer" class="btn btn-light" id="contact-whatsapp">
+            Chat on WhatsApp
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ FOOTER ═══════════════════ -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span class="footer-logo">AF STEEL FURNITURE</span>
+      <p class="footer-copy">© <span id="year"></span> AF Steel Furniture. All rights reserved.</p>
+      <nav class="footer-nav" aria-label="Footer navigation">
+        <a href="products.html">Products</a>
+      </nav>
+    </div>
+  </footer>
+
+  <!-- ═══════════════════ WHATSAPP FLOAT ═══════════════════ -->
+  <a
+    href="https://wa.me/919347945824"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="wa-float"
+    aria-label="Chat on WhatsApp"
+    id="wa-float"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="26" height="26" aria-hidden="true">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </svg>
+  </a>
+
+  <script src="script.js"></script>
+</body>
+</html>
